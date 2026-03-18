@@ -2,42 +2,48 @@ const video = document.getElementById("video");
 const countText = document.getElementById("count");
 
 let count = 0;
-let state = "center"; // left / right
+let state = "center";
+
+let xHistory = []; // 🔥 값 저장해서 평균냄
 
 // 카메라 실행
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => {
     video.srcObject = stream;
-  })
-  .catch(err => {
-    alert("카메라 오류: " + err);
   });
 
-// mediapipe 설정
+// mediapipe
 const pose = new window.Pose({
   locateFile: (file) => {
     return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
   }
 });
 
-// 🔥 핵심 로직
 pose.onResults(results => {
   if (!results.poseLandmarks) return;
 
-  const shoulder = results.poseLandmarks[11]; // 왼쪽 어깨
-  const x = shoulder.x;
+  const shoulder = results.poseLandmarks[11];
+  let x = shoulder.x;
 
-  // 👉 현재 위치 판단
-  if (x < 0.5) {
-    if (state === "right") {
-      state = "left";
-    }
-  } else {
-    if (state === "left") {
-      count++; // 🔥 여기서 카운트 증가
-      state = "right";
-    }
+  // 🔥 1. 평균 필터 (핵심)
+  xHistory.push(x);
+  if (xHistory.length > 5) xHistory.shift();
+
+  let avgX = xHistory.reduce((a,b)=>a+b,0) / xHistory.length;
+
+  // 🔥 2. 구간 설정 (넓게)
+  let newState = state;
+
+  if (avgX < 0.45) newState = "left";
+  else if (avgX > 0.55) newState = "right";
+  else newState = "center";
+
+  // 🔥 3. 확실한 이동만 카운트
+  if (state === "left" && newState === "right") {
+    count++;
   }
+
+  state = newState;
 
   countText.innerText = count;
 });
