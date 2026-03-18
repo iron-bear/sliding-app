@@ -1,37 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sliding Counter</title>
-</head>
-
-<body style="text-align:center; font-family:sans-serif; margin:0;">
+<body style="text-align:center;">
 
 <h2>Sliding Counter</h2>
 
 <div style="position:relative; display:inline-block;">
-  
   <video id="video" width="300" autoplay playsinline></video>
 
-  <!-- 🔥 가운데 기준선 -->
+  <!-- 기준선 -->
   <div style="
     position:absolute;
-    top:0;
     left:50%;
+    top:0;
     width:2px;
     height:100%;
-    background:red;
-  "></div>
-
+    background:red;">
+  </div>
 </div>
-
-<br><br>
 
 <p>Count: <span id="count">0</span></p>
 
-<!-- mediapipe -->
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
-
 <script src="script.js"></script>
 
 </body>
