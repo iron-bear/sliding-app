@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sliding Counter</title>
+</head>
+<body style="text-align:center; font-family:sans-serif;">
+
+<h2>Sliding Counter</h2>
+
+<video id="video" width="300" autoplay playsinline></video>
+
+<br><br>
+
+<input type="number" id="targetInput" placeholder="목표 입력">
+<button onclick="setTarget()">설정</button>
+
+<p>Count: <span id="count">0</span></p>
+<p>Remaining: <span id="remaining">0</span></p>
+
+<!-- 🔥 중요: mediapipe 제대로 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
