@@ -1,17 +1,19 @@
 const video = document.getElementById("video");
 const countText = document.getElementById("count");
-const remainingText = document.getElementById("remaining");
 
 let count = 0;
 let wentLeft = false;
-let target = 50;
 
 // 카메라 실행
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => {
     video.srcObject = stream;
+  })
+  .catch(err => {
+    alert("카메라 안됨: " + err);
   });
 
+// mediapipe
 const pose = new window.Pose({
   locateFile: (file) => {
     return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
@@ -34,7 +36,6 @@ pose.onResults(results => {
   }
 
   countText.innerText = count;
-  remainingText.innerText = Math.max(target - count, 0);
 });
 
 async function detect() {
@@ -45,7 +46,3 @@ async function detect() {
 video.onloadeddata = () => {
   detect();
 };
-
-function setTarget() {
-  target = parseInt(document.getElementById("targetInput").value);
-}
